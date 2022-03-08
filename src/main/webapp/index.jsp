@@ -100,6 +100,6 @@
 			</main>
 			
 			<!-- Footer -->
-			<jsp:include page="./footer.jsp" />
+			<jsp:include page="${pageContext.request.contextPath}/footer.jsp" />
 	  </body>
 </html>

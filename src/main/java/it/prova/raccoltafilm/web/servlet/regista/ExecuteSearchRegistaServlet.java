@@ -41,7 +41,7 @@ public class ExecuteSearchRegistaServlet extends HttpServlet {
 			request.getRequestDispatcher("/regista/search.jsp").forward(request, response);
 			return;
 		}
-		request.getRequestDispatcher("regista/list.jsp").forward(request, response);
+		response.sendRedirect("ExecuteListRegistaServlet?operationResult=SUCCESS");
 	}
 
 }
