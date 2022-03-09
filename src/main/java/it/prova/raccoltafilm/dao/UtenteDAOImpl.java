@@ -37,6 +37,13 @@ public class UtenteDAOImpl implements UtenteDAO {
 	}
 
 	@Override
+	public Optional<Utente> findOneConRuoli(Long id) throws Exception {
+		return entityManager
+				.createQuery("select * FROM Utente u left join fetch u.ruoli r where u.id = :idUtente", Utente.class)
+				.setParameter("idUtente", id).getResultList().stream().findFirst();
+	}
+
+	@Override
 	public void update(Utente utenteInstance) throws Exception {
 		if (utenteInstance == null) {
 			throw new Exception("Problema valore in input");
@@ -64,7 +71,7 @@ public class UtenteDAOImpl implements UtenteDAO {
 	// questo metodo ci torna utile per capire se possiamo rimuovere un ruolo non
 	// essendo collegato ad un utente
 	@Override
-	public List<Utente> findAllByRuolo(Ruolo ruoloInput) throws Exception{
+	public List<Utente> findAllByRuolo(Ruolo ruoloInput) throws Exception {
 		TypedQuery<Utente> query = entityManager.createQuery("select u FROM Utente u join u.ruoli r where r = :ruolo",
 				Utente.class);
 		query.setParameter("ruolo", ruoloInput);
@@ -72,7 +79,7 @@ public class UtenteDAOImpl implements UtenteDAO {
 	}
 
 	@Override
-	public Optional<Utente> findByUsernameAndPassword(String username, String password) throws Exception{
+	public Optional<Utente> findByUsernameAndPassword(String username, String password) throws Exception {
 		TypedQuery<Utente> query = entityManager.createQuery(
 				"select u FROM Utente u  " + "where u.username = :username and u.password=:password ", Utente.class);
 		query.setParameter("username", username);
@@ -81,7 +88,7 @@ public class UtenteDAOImpl implements UtenteDAO {
 	}
 
 	@Override
-	public Optional<Utente> login(String username, String password) throws Exception{
+	public Optional<Utente> login(String username, String password) throws Exception {
 		TypedQuery<Utente> query = entityManager.createQuery(
 				"select u FROM Utente u join fetch u.ruoli r "
 						+ "where u.username = :username and u.password=:password and u.stato=:statoUtente",
@@ -93,7 +100,7 @@ public class UtenteDAOImpl implements UtenteDAO {
 	}
 
 	@Override
-	public List<Utente> findByExample(Utente example) throws Exception{
+	public List<Utente> findByExample(Utente example) throws Exception {
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
 		List<String> whereClauses = new ArrayList<String>();
 
@@ -111,7 +118,7 @@ public class UtenteDAOImpl implements UtenteDAO {
 			whereClauses.add(" u.username like :username ");
 			paramaterMap.put("username", "%" + example.getUsername() + "%");
 		}
-		
+
 		if (example.getDateCreated() != null) {
 			whereClauses.add(" u.dateCreated >= :dateCreated ");
 			paramaterMap.put("dateCreated", example.getDateCreated());

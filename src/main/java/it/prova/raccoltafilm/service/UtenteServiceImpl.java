@@ -1,5 +1,6 @@
 package it.prova.raccoltafilm.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import javax.persistence.EntityManager;
 
 import it.prova.raccoltafilm.dao.UtenteDAO;
 import it.prova.raccoltafilm.model.Ruolo;
+import it.prova.raccoltafilm.model.StatoUtente;
 import it.prova.raccoltafilm.model.Utente;
 import it.prova.raccoltafilm.web.listener.LocalEntityManagerFactoryListener;
 
@@ -96,10 +98,11 @@ public class UtenteServiceImpl implements UtenteService {
 
 			// uso l'injection per il dao
 			utenteDAO.setEntityManager(entityManager);
-
+			utenteInstance.setDateCreated(new Date());
+			utenteInstance.setStato(StatoUtente.CREATO);
 			// eseguo quello che realmente devo fare
 			utenteDAO.insert(utenteInstance);
-
+			
 			entityManager.getTransaction().commit();
 		} catch (Exception e) {
 			entityManager.getTransaction().rollback();
@@ -204,6 +207,26 @@ public class UtenteServiceImpl implements UtenteService {
 
 			// eseguo quello che realmente devo fare
 			return utenteDAO.findByExample(example);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			LocalEntityManagerFactoryListener.closeEntityManager(entityManager);
+		}
+	}
+
+	@Override
+	public Utente caricaSingoloElementoConRuoli(Long id) throws Exception {
+		// questo è come una connection
+		EntityManager entityManager = LocalEntityManagerFactoryListener.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			utenteDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return utenteDAO.findOneConRuoli(id).orElse(null);
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -29,4 +29,7 @@ public interface UtenteService  {
 
 	public Object findByExample(Utente example)throws Exception;
 
+	Utente caricaSingoloElementoConRuoli(Long id) throws Exception;
+
+
 }

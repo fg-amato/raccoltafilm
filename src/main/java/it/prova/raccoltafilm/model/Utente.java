@@ -58,7 +58,14 @@ public class Utente {
 		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 	}
-	
+
+	public Utente(String username, String nome, String cognome, String password) {
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.password = password;
+	}
+
 	public Utente(String username, String password, String nome, String cognome, Date dateCreated) {
 		this.username = username;
 		this.password = password;
@@ -66,7 +73,7 @@ public class Utente {
 		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -137,6 +144,10 @@ public class Utente {
 				return true;
 		}
 		return false;
+	}
+
+	public void addToRuoli(Ruolo caricaSingoloElemento) {
+		ruoli.add(caricaSingoloElemento);
 	}
 
 }
